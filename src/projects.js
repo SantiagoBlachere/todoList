@@ -1,4 +1,13 @@
-export default function projects(projects) {
+
+
+
+export default function projects(projects, toDoArray) {
+    
+    console.log(toDoArray)
+    toDoArray.forEach(el => {
+        console.log(el.title)
+    })
+
     const previousContainer = document.querySelector('.projectsContainer')
     if(previousContainer) {
         previousContainer.remove();
@@ -9,11 +18,14 @@ export default function projects(projects) {
     projects.forEach(project => {
         
         
-        const p = document.createElement('p');
-        p.innerText = project.name
+        const projectBtn = document.createElement('button');
+        projectBtn.innerText = project
+        
 
-        projectsContainer.appendChild(p)
+        projectsContainer.appendChild(projectBtn)
     });
     const root = document.querySelector('#root');
     root.appendChild(projectsContainer)
+    
+  
 }
