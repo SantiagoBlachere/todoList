@@ -1,6 +1,40 @@
 
-export default function todo(todo, projects) {
-    console.log(projects)
+export const domManipulation = () => {
+    const projectsArray = [];
+    const toDos = [];
+    let toDosUpdated = [];
+
+    class Todo {
+        constructor(title, description, dueDate, priority, notes) {
+            this.title = title,
+            this.description = description,
+            this.dueDate = dueDate,
+            this.priority = priority,
+            this.notes = notes,
+            this.project = 'any'
+            toDos.push( { ...this } )
+        }
+
+        
+    }
+    /*
+    class Project {
+        
+        constructor(name) {
+            this.name = name
+            projectsArray.push(this);
+            projects(projectsArray);
+        }
+        
+
+    }
+    */
+    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", )
+    const todorandom2 = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", )
+    renderToDo(todorandom, projectsArray, toDosUpdated)
+    renderToDo(todorandom2, projectsArray, toDosUpdated)
+    
+    function renderToDo (todo, projects, toDosUpdated) {
     const root = document.querySelector('#root');
     
     const todoContainer = document.createElement('div');
@@ -40,7 +74,7 @@ export default function todo(todo, projects) {
     projectSelect.classList.add('select')
     
     projects.forEach(project => {
-        console.log(project.name)
+        
         const option = document.createElement('option');
         option.classList.add(`option`);
         option.setAttribute('value', `${project.name}`);
@@ -50,13 +84,7 @@ export default function todo(todo, projects) {
         projectSelect.appendChild(option);
     });
     
-    
-    
-    
-
     projectForm.onchange = handleChange;
-    
-    
     projectForm.appendChild(selectLabel);
     projectForm.appendChild(projectSelect);
     
@@ -77,9 +105,11 @@ export default function todo(todo, projects) {
         })
         toDos[inArray] = todo;
         toDosUpdated = toDos;
-        console.log(toDosUpdated)
+        
         
     }
+    }
+    
     
 }
 

@@ -1,10 +1,6 @@
-
-import { toDosUpdated } from "./todo";
-
-
 export default function projects(projects) {
-    console.log(projects)
-    console.log(toDosUpdated)
+    
+    
 
     const previousContainer = document.querySelector('.projectsContainer')
     if(previousContainer) {
@@ -23,6 +19,12 @@ export default function projects(projects) {
 
         projectsContainer.appendChild(projectBtn)
     });
+
+function handleClick(e){
+    e.preventDefault;
+    
+}
+
     const root = document.querySelector('#root');
     root.appendChild(projectsContainer)
     

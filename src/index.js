@@ -1,47 +1,12 @@
-import todo from "../src/todo";
-import projects from "./projects";
+import { domManipulation } from "./todo";
 
-
-const projectsArray = [];
-const toDos = [];
-export { toDos }
-class Todo {
-    constructor(title, description, dueDate, priority, notes) {
-        this.title = title,
-        this.description = description,
-        this.dueDate = dueDate,
-        this.priority = priority,
-        this.notes = notes,
-        this.project = 'any'
-        toDos.push( { ...this } )
-    }
-
-     
-}
-
-class Project {
-    
-    constructor(name) {
-        this.name = name
-        projectsArray.push(this);
-        projects(projectsArray);
-    }
-    
-
-}
+domManipulation();
 
 
 
-todo(new Todo('asd','asd','asd','asd','asd',), projectsArray)
-todo(new Todo('asd2','asd2','asd2','asd2','asd2',), projectsArray)
-todo(new Todo('asd3','asd3','asd3','asd3','asd3',), projectsArray)
 
 
-const wtf = new Project('wtf');
-const wtf2 = new Project('wtf2');
-const wtf3 = new Project('wtf3');
-const wtf4 = new Project('wtf4');
-console.log(toDosUpdated);
+
 
 
 /* ok
