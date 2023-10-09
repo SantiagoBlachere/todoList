@@ -1,7 +1,6 @@
 
-
 export default function todo(todo, projects) {
-    
+    console.log(projects)
     const root = document.querySelector('#root');
     
     const todoContainer = document.createElement('div');
@@ -39,17 +38,19 @@ export default function todo(todo, projects) {
     projectSelect.setAttribute('name', 'projects');
     projectSelect.setAttribute('id', 'projects');
     projectSelect.classList.add('select')
+    
     projects.forEach(project => {
+        console.log(project.name)
         const option = document.createElement('option');
         option.classList.add(`option`);
-        option.setAttribute('value', `${project.project}`);
-        option.innerText = `${project.project}`
+        option.setAttribute('value', `${project.name}`);
+        option.innerText = `${project.name}`
         
         
         projectSelect.appendChild(option);
     });
     
-    const options = projectForm.querySelectorAll('.option');
+    
     
     
 
@@ -66,8 +67,19 @@ export default function todo(todo, projects) {
     function handleChange (e) {
         e.preventDefault();
        
-        const selectedProject = e.target.value
+        const selectedProject = e.target.value;
+        
         todo.project = selectedProject;
         
+        const inArray = toDos.findIndex((el) => {
+            
+            return el.title === todo.title
+        })
+        toDos[inArray] = todo;
+        toDosUpdated = toDos;
+        console.log(toDosUpdated)
+        
     }
+    
 }
+

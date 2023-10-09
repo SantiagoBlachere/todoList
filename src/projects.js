@@ -1,12 +1,10 @@
 
+import { toDosUpdated } from "./todo";
 
 
-export default function projects(projects, toDoArray) {
-    
-    console.log(toDoArray)
-    toDoArray.forEach(el => {
-        console.log(el.title)
-    })
+export default function projects(projects) {
+    console.log(projects)
+    console.log(toDosUpdated)
 
     const previousContainer = document.querySelector('.projectsContainer')
     if(previousContainer) {
@@ -19,7 +17,8 @@ export default function projects(projects, toDoArray) {
         
         
         const projectBtn = document.createElement('button');
-        projectBtn.innerText = project
+        projectBtn.innerText = project.name;
+        projectBtn.classList.add('projectBtn')
         
 
         projectsContainer.appendChild(projectBtn)
