@@ -1,9 +1,10 @@
 
 export const domManipulation = () => {
-    const projectsArray = [];
+    /* global variables */
+    const projectsArray = [{name:'any'}];
     const toDos = [];
     let toDosUpdated = [];
-
+    /* classes */
     class Todo {
         constructor(title, description, dueDate, priority, notes) {
             this.title = title,
@@ -17,24 +18,29 @@ export const domManipulation = () => {
 
         
     }
-    /*
+    
     class Project {
         
         constructor(name) {
             this.name = name
             projectsArray.push(this);
-            projects(projectsArray);
+            
         }
         
 
     }
-    */
-    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", )
-    const todorandom2 = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", )
-    renderToDo(todorandom, projectsArray, toDosUpdated)
-    renderToDo(todorandom2, projectsArray, toDosUpdated)
+    /* toy objects to see if it works */
+    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", );
+    const todorandom2 = new Todo("watarfo2", "watarfo2", "watarfo2", "watarfo2", "watarfo2", );
     
-    function renderToDo (todo, projects, toDosUpdated) {
+    const projectardo = new Project('proyecto 1');
+    const projectardo2 = new Project('proyecto 2');
+    renderToDo(projectsArray, toDos);
+   
+    renderProjects(projectsArray, toDos);
+    
+    /* render a todo item */
+    function renderToDo (projects, toDos) {
     const root = document.querySelector('#root');
     
     const todoContainer = document.createElement('div');
@@ -103,13 +109,60 @@ export const domManipulation = () => {
             
             return el.title === todo.title
         })
+        
         toDos[inArray] = todo;
+        
         toDosUpdated = toDos;
         
+        renderProjects(projectsArray, toDosUpdated)
+        
+        
+    }
+    }
+    /* project rendering */
+    function renderProjects(projects, toDos) {
+        
+        
+        const previousContainer = document.querySelector('.projectsContainer')
+        if(previousContainer) {
+            previousContainer.remove();
+        }
+        
+        const projectsContainer = document.createElement('div');
+        projectsContainer.classList.add('projectsContainer');
+        if (projects.length > 0) {
+            projects.forEach(project => {
+            
+            
+                const projectBtn = document.createElement('button');
+                projectBtn.innerText = project.name;
+                projectBtn.classList.add('projectBtn');
+                projectBtn.addEventListener('click', handleClick);
+                
+                projectBtn.setAttribute('project-name', project.name);
+                
+        
+                projectsContainer.appendChild(projectBtn)
+            });
+            
+            function handleClick(e){
+            e.preventDefault
+            let projectClicked = e.target.getAttribute('project-name');
+            let projectToDos = toDos.filter( (el) => {
+                return el.project === projectClicked
+            })
+            renderToDo()
+            }
+            
+        }
+        
+    
+        const root = document.querySelector('#root');
+        root.appendChild(projectsContainer)
+        
         
     }
     }
     
-    
-}
+
 

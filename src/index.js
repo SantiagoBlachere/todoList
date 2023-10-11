@@ -9,6 +9,7 @@ domManipulation();
 
 
 
+
 /* ok
 tengo 1 modulo que crea PROYECTOS y los empuja a un ARRAY de proyectos (esto voy a usar para mostrarlos en el DOM y que el usuario pueda elegirlos)
 
