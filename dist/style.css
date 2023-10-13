@@ -1,3 +1,17 @@
 .toDoCard {
     border: 2px solid black;
 }
+#root {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+.projectsContainer {
+    display: grid;
+    grid-row: 1 2;
+}
+.toDoSection {
+    display: grid;
+    grid-row: 2 3;
+
+}
