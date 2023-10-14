@@ -1,9 +1,50 @@
 
+import { forms } from "./forms";
 export const domManipulation = () => {
     /* global variables */
     const projectsArray = [];
     const toDos = [];
     let toDosUpdated = [];
+    
+   
+    /* DOM static sections */
+    
+
+    const projectsSection = document.createElement('section');
+    projectsSection.classList.add('projectsSection');
+    root.appendChild(projectsSection)
+
+    const navBar = document.createElement('section');
+    navBar.classList.add('navBar');
+    const newProject = document.createElement('button');
+    newProject.innerText = 'NEW PROJECT';
+    newProject.setAttribute('name', 'newProject');
+    newProject.onclick = handleClick;
+
+    const newToDo = document.createElement('button');
+    newToDo.setAttribute('name', 'newToDo');
+    newToDo.innerText = 'NEW TO-DO';
+
+    navBar.appendChild(newProject);
+    navBar.appendChild(newToDo);
+    root.appendChild(navBar);
+
+    
+    function handleClick(e) {
+        e.preventDefault
+        let clicked = e.target.getAttribute('name');
+        console.log(clicked)
+        if (clicked === 'newProject') {
+            let projectForm = forms.projectForm();
+            root.appendChild(projectForm)
+        }
+    }
+    
+    const toDosContainer = document.createElement('section');
+    toDosContainer.classList.add('toDosSection')
+    root.appendChild(toDosContainer)
+
+    
     /* classes */
     class Todo {
         constructor(title, description, dueDate, priority, notes) {
@@ -37,6 +78,7 @@ export const domManipulation = () => {
     const projectardo = new Project('proyecto 1');
     const projectardo2 = new Project('proyecto 2');
     renderProjects(projectsArray, toDos);
+    
     renderToDo(projectsArray, toDos);
     
    
@@ -47,42 +89,42 @@ export const domManipulation = () => {
     const root = document.querySelector('#root');
    
         
-    const toDosPrevious = document.querySelector('.toDoSection');
+    const toDosPrevious = document.querySelector('.toDoArticle');
     if (toDosPrevious) {
         toDosPrevious.remove()
         
     }
     
     
-    const toDoSection = document.createElement('section');
-    toDoSection.classList.add('toDoSection');
-    root.appendChild(toDoSection)
+    const toDoArticle = document.createElement('article');
+    toDoArticle.classList.add('toDoArticle');
+    
     toDos.forEach((todo) => {
         
     
-        const todoContainer = document.createElement('div');
-        todoContainer.classList.add('toDoCard')
+        const todoCardContainer = document.createElement('div');
+        todoCardContainer.classList.add('toDoCard')
         
     
         const title = document.createElement('h2');
         title.innerText = `${todo.title}`
-        todoContainer.appendChild(title);
+        todoCardContainer.appendChild(title);
     
         const description = document.createElement('p');
         description.innerText = `description: ${todo.description}`;
-        todoContainer.appendChild(description);
+        todoCardContainer.appendChild(description);
     
         const dueDate = document.createElement('p');
         dueDate.innerText = `Due date: ${todo.dueDate}`;
-        todoContainer.appendChild(dueDate);
+        todoCardContainer.appendChild(dueDate);
     
         const priority = document.createElement('p');
         priority.innerText = `Priority: ${todo.priority}`;
-        todoContainer.appendChild(priority);
+        todoCardContainer.appendChild(priority);
     
         const notes = document.createElement('p');
         notes.innerText = `notes: ${todo.notes}`;
-        todoContainer.appendChild(notes);
+        todoCardContainer.appendChild(notes);
     
         const projectForm = document.createElement('form');
         
@@ -113,7 +155,7 @@ export const domManipulation = () => {
         projectForm.onchange = handleChange;
         projectForm.appendChild(selectLabel);
         projectForm.appendChild(projectSelect);
-        todoContainer.appendChild(projectForm);
+        todoCardContainer.appendChild(projectForm);
         
 
         
@@ -138,7 +180,10 @@ export const domManipulation = () => {
             
             
         }
-        toDoSection.appendChild(todoContainer);
+        toDoArticle.appendChild(todoCardContainer);
+        
+        toDosContainer.appendChild(toDoArticle)
+        
     })
      
 }
@@ -195,8 +240,8 @@ export const domManipulation = () => {
         }
         
     
-        const root = document.querySelector('#root');
-        root.appendChild(projectsContainer)
+        
+        projectsSection.appendChild(projectsContainer)
         
         
     }
