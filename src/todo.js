@@ -24,6 +24,7 @@ export const domManipulation = () => {
     const newToDo = document.createElement('button');
     newToDo.setAttribute('name', 'newToDo');
     newToDo.innerText = 'NEW TO-DO';
+    newToDo.onclick = handleClick;
 
     navBar.appendChild(newProject);
     navBar.appendChild(newToDo);
@@ -36,7 +37,25 @@ export const domManipulation = () => {
         console.log(clicked)
         if (clicked === 'newProject') {
             let projectForm = forms.projectForm();
+            
             root.appendChild(projectForm)
+        } else {
+            let todoForm = forms.toDoForm();
+            /* select project */
+            const projectSelectDiv = document.createElement('div');
+            const projectSelectLabel = document.createElement('label');
+            projectSelectLabel.innerText = "Project "
+            const projectSelect = document.createElement('select');
+            projectsArray.forEach( (project) => {
+                let projectOption = document.createElement('option');
+                projectOption.innerText = `${project.name}`
+                projectSelect.appendChild(projectOption);
+            })
+
+            todoForm.appendChild(projectSelectDiv);
+            projectSelectDiv.appendChild(projectSelectLabel);
+            projectSelectDiv.appendChild(projectSelect);
+            root.appendChild(todoForm)
         }
     }
     
@@ -47,12 +66,12 @@ export const domManipulation = () => {
     
     /* classes */
     class Todo {
-        constructor(title, description, dueDate, priority, notes) {
+        constructor(title, description, dueDate, priority) {
             this.title = title,
             this.description = description,
             this.dueDate = dueDate,
             this.priority = priority,
-            this.notes = notes,
+            
             this.project = 'any';
             this.any = 'any'
             toDos.push( { ...this } )
@@ -72,8 +91,8 @@ export const domManipulation = () => {
 
     }
     /* toy objects to see if it works */
-    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo", "watarfo", );
-    const todorandom2 = new Todo("watarfo2", "watarfo2", "watarfo2", "watarfo2", "watarfo2", );
+    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo" );
+    const todorandom2 = new Todo("watarfo2", "watarfo2", "watarfo2", "watarfo2");
     
     const projectardo = new Project('proyecto 1');
     const projectardo2 = new Project('proyecto 2');
@@ -122,9 +141,7 @@ export const domManipulation = () => {
         priority.innerText = `Priority: ${todo.priority}`;
         todoCardContainer.appendChild(priority);
     
-        const notes = document.createElement('p');
-        notes.innerText = `notes: ${todo.notes}`;
-        todoCardContainer.appendChild(notes);
+        
     
         const projectForm = document.createElement('form');
         
@@ -160,7 +177,7 @@ export const domManipulation = () => {
 
         
         function handleChange (e) {
-            e.preventDefault();
+            
            
             const selectedProject = e.target.value;
             
