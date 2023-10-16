@@ -46,16 +46,35 @@ export const domManipulation = () => {
             const projectSelectLabel = document.createElement('label');
             projectSelectLabel.innerText = "Project "
             const projectSelect = document.createElement('select');
+            projectSelect.setAttribute('name', 'project')
             projectsArray.forEach( (project) => {
                 let projectOption = document.createElement('option');
                 projectOption.innerText = `${project.name}`
                 projectSelect.appendChild(projectOption);
+                
             })
+            const submitInput = document.createElement('input');
+            submitInput.setAttribute('type', 'submit');
+            submitInput.innerText = 'Add To-Do';
 
             todoForm.appendChild(projectSelectDiv);
             projectSelectDiv.appendChild(projectSelectLabel);
             projectSelectDiv.appendChild(projectSelect);
-            root.appendChild(todoForm)
+            todoForm.appendChild(submitInput)
+            root.appendChild(todoForm);
+
+            todoForm.onsubmit= (e) => {
+                e.preventDefault();
+                let date = todoForm.elements["date"].value;
+                let title = todoForm.elements["title"].value;
+                let description = todoForm.elements["description"].value;
+                let priority = todoForm.elements["priority"].value;
+                let project = todoForm.elements["project"].value;
+                let submittedTodo = new Todo(title, description, date, priority, project)
+
+                console.log(submittedTodo);
+                renderToDo(projectsArray, toDos)
+            }
         }
     }
     
@@ -66,13 +85,13 @@ export const domManipulation = () => {
     
     /* classes */
     class Todo {
-        constructor(title, description, dueDate, priority) {
+        constructor(title, description, dueDate, priority, project='any') {
             this.title = title,
             this.description = description,
             this.dueDate = dueDate,
             this.priority = priority,
             
-            this.project = 'any';
+            this.project = project
             this.any = 'any'
             toDos.push( { ...this } )
         }
@@ -91,8 +110,7 @@ export const domManipulation = () => {
 
     }
     /* toy objects to see if it works */
-    const todorandom = new Todo("watarfo", "watarfo", "watarfo", "watarfo" );
-    const todorandom2 = new Todo("watarfo2", "watarfo2", "watarfo2", "watarfo2");
+    
     
     const projectardo = new Project('proyecto 1');
     const projectardo2 = new Project('proyecto 2');
@@ -140,6 +158,12 @@ export const domManipulation = () => {
         const priority = document.createElement('p');
         priority.innerText = `Priority: ${todo.priority}`;
         todoCardContainer.appendChild(priority);
+        if (todo.project !== 'any') {
+            const project = document.createElement('p');
+            project.innerText = `Assigned project: ${todo.project}`;
+            todoCardContainer.appendChild(project);
+        }
+        
     
         
     
@@ -157,7 +181,7 @@ export const domManipulation = () => {
         const anyOption = document.createElement('option');
         anyOption.classList.add('option');
         anyOption.setAttribute('value', 'any');
-        anyOption.innerText = 'Any';
+        anyOption.innerText = `${'Any'}`
         projectSelect.appendChild(anyOption)
         projects.forEach(project => {
         
@@ -178,21 +202,36 @@ export const domManipulation = () => {
         
         function handleChange (e) {
             
-           
+           /* retrieves the value of the option selected */
             const selectedProject = e.target.value;
-            
+           /* assigns that value to the project property of the todo */
             todo.project = selectedProject;
+            /* finds that todo in the todos array*/
             
+            if (toDosUpdated) {
+                console.log(toDosUpdated)
+                const inArray = toDosUpdated.findIndex((el) => {
+                
+                    return el.title === todo.title
+                })  
+                console.log(inArray)
+                toDos[inArray] = todo;
+            
+                toDosUpdated = toDos;
+                console.log(toDosUpdated);
+                renderToDo(projects, toDosUpdated);
+                
+            }
             const inArray = toDos.findIndex((el) => {
                 
                 return el.title === todo.title
             })
-            
             toDos[inArray] = todo;
             
             toDosUpdated = toDos;
-            
-            renderProjects(projects, toDosUpdated)
+            console.log(toDosUpdated)
+            renderToDo(projects, toDosUpdated);
+
             
             
             

@@ -32,6 +32,7 @@ export const forms = (function() {
       divTitleLabel.innerText = 'Title: ';
       let divTitleInput = document.createElement('input');
       divTitleInput.setAttribute('type', 'text');
+      divTitleInput.setAttribute('name', 'title');
       divTitleInput.setAttribute('id', 'title');
       divTitleInput.setAttribute('required', true);
       
@@ -47,17 +48,20 @@ export const forms = (function() {
           /* options */
       let divPriorityLow = document.createElement('option');
       divPriorityLow.setAttribute('value', 'Low');
+      divPriorityLow.setAttribute('name', 'low');
       divPriorityLow.setAttribute('selected', true);
       divPriorityLow.setAttribute('required', true);
       divPriorityLow.innerText = 'Low';
 
       let divPriorityMid = document.createElement('option');
       divPriorityMid.setAttribute('value', 'Mid');
+      divPriorityMid.setAttribute('name', 'mid');
       divPriorityMid.setAttribute('required', true);
       divPriorityMid.innerText = 'Mid';
      
       let divPriorityHigh = document.createElement('option');
       divPriorityHigh.setAttribute('value', 'High');
+      divPriorityHigh.setAttribute('name', 'priority');
       divPriorityHigh.setAttribute('required', true);
       divPriorityHigh.innerText = 'High';
       
@@ -66,6 +70,7 @@ export const forms = (function() {
       select.appendChild(divPriorityLow);
       select.appendChild(divPriorityMid);
       select.appendChild(divPriorityHigh);
+      select.setAttribute('name', 'priority')
 
       /* description input */
       let divDescription = document.createElement('div');
@@ -74,6 +79,7 @@ export const forms = (function() {
       divDescriptionLabel.innerText = 'Description: ';
       let divDescriptionInput = document.createElement('input');
       divDescriptionInput.setAttribute('type', 'text');
+      divDescriptionInput.setAttribute('name', 'description');
       divDescriptionInput.setAttribute('id', 'description');
       
       divDescription.appendChild(divDescriptionLabel);
