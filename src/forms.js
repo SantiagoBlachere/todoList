@@ -15,6 +15,23 @@ export const forms = (function() {
       let projectForm = document.createElement('form');
       projectForm.classList.add('form');
       
+      let projectName = document.createElement('input');
+      projectName.setAttribute('id', 'project-name');
+      projectName.setAttribute('type', 'text');
+      projectName.setAttribute('name', 'project')
+      
+      let projectNameLabel = document.createElement('label');
+      projectNameLabel.setAttribute('for', 'project-name');
+      projectNameLabel.innerText = 'Project name: '
+
+      let submitProjectBtn = document.createElement('input');
+      submitProjectBtn.setAttribute('type', 'submit');
+      submitProjectBtn.innerText = 'Submit Project';
+
+
+      projectForm.appendChild(projectNameLabel);
+      projectForm.appendChild(projectName);
+      projectForm.appendChild(submitProjectBtn)
       
         
       return projectForm;
@@ -94,6 +111,7 @@ export const forms = (function() {
       divDateInput.setAttribute('type', 'date');
       divDateInput.setAttribute('id', 'date');
       divDateInput.setAttribute('name', 'date');
+      divDateInput.required = true;
 
       divDate.appendChild(divDateLabel);
       divDate.appendChild(divDateInput);

@@ -34,10 +34,21 @@ export const domManipulation = () => {
     function handleClick(e) {
         e.preventDefault
         let clicked = e.target.getAttribute('name');
-        console.log(clicked)
+        
         if (clicked === 'newProject') {
+            
             let projectForm = forms.projectForm();
             
+            projectForm.onsubmit = (e) => {
+                e.preventDefault();
+                let projectName = projectForm.elements["project"].value;
+                
+                
+                const newProject = new Project(projectName);
+                
+                renderProjects(projectsArray, toDos); 
+                renderToDo(projectsArray, toDos);
+            }
             root.appendChild(projectForm)
         } else {
             let todoForm = forms.toDoForm();
@@ -72,7 +83,7 @@ export const domManipulation = () => {
                 let project = todoForm.elements["project"].value;
                 let submittedTodo = new Todo(title, description, date, priority, project)
 
-                console.log(submittedTodo);
+                
                 renderToDo(projectsArray, toDos)
             }
         }
@@ -85,7 +96,7 @@ export const domManipulation = () => {
     
     /* classes */
     class Todo {
-        constructor(title, description, dueDate, priority, project='any') {
+        constructor(title, description='no description', dueDate, priority, project='any') {
             this.title = title,
             this.description = description,
             this.dueDate = dueDate,
@@ -112,8 +123,7 @@ export const domManipulation = () => {
     /* toy objects to see if it works */
     
     
-    const projectardo = new Project('proyecto 1');
-    const projectardo2 = new Project('proyecto 2');
+    
     renderProjects(projectsArray, toDos);
     
     renderToDo(projectsArray, toDos);
@@ -123,6 +133,12 @@ export const domManipulation = () => {
     
     /* render a todo item */
     function renderToDo (projects, toDos) {
+    let localStorageTodos = JSON.parse(localStorage.getItem('todos'));
+    if (localStorageTodos.length > 0) {
+        toDos = localStorageTodos;
+    }
+
+    console.log(localStorageTodos)
     const root = document.querySelector('#root');
    
         
@@ -146,23 +162,71 @@ export const domManipulation = () => {
         const title = document.createElement('h2');
         title.innerText = `${todo.title}`
         todoCardContainer.appendChild(title);
-    
-        const description = document.createElement('p');
-        description.innerText = `description: ${todo.description}`;
-        todoCardContainer.appendChild(description);
-    
+
         const dueDate = document.createElement('p');
         dueDate.innerText = `Due date: ${todo.dueDate}`;
         todoCardContainer.appendChild(dueDate);
+
+        if (todo.project !== 'any') {
+            const project = document.createElement('p');
+            project.classList.add('project')
+            project.innerText = `Assigned project: ${todo.project}`;
+            todoCardContainer.appendChild(project);
+            
+        }
+
+
+        (function createDetailBtn () {
+            const detailsBtn = document.createElement('button');
+            detailsBtn.classList.add('details')
+            detailsBtn.innerText = 'Details';
+            detailsBtn.onclick = detailClickHandler;
+            todoCardContainer.appendChild(detailsBtn);
+            function detailClickHandler() {
+                todoCardContainer.appendChild(description);
+                todoCardContainer.appendChild(priority);
+                projectForm.appendChild(selectLabel);
+                projectForm.appendChild(projectSelect);
+                const detailsBtn = document.querySelector('.details');
+                detailsBtn.remove();
+                const undetailedBtn = document.createElement('button');
+                undetailedBtn.innerText = 'Go Back';
+                todoCardContainer.appendChild(undetailedBtn);
+                undetailedBtn.onclick = () => {
+                    let project = document.querySelector('.project');
+                    project.remove();
+                    priority.remove();
+                    selectLabel.remove();
+                    projectSelect.remove();
+                    undetailedBtn.remove();
+                    createDetailBtn();
+    
+                }
+                
+            }
+        })();
+        
+        
+        
+        
+        
+        
+        /* tabas haciendo el boton para expandir detalles, appendeando los demas elementos solo cuando se clickee esto, acordate de borrar */
+        const description = document.createElement('p');
+        if (todo.description !== '') {
+            description.innerText = `description: ${todo.description}`;
+        } else {
+            description.innerText ='No description'
+        }
+        
+        
+    
+        
     
         const priority = document.createElement('p');
         priority.innerText = `Priority: ${todo.priority}`;
-        todoCardContainer.appendChild(priority);
-        if (todo.project !== 'any') {
-            const project = document.createElement('p');
-            project.innerText = `Assigned project: ${todo.project}`;
-            todoCardContainer.appendChild(project);
-        }
+        
+        
         
     
         
@@ -194,8 +258,7 @@ export const domManipulation = () => {
             projectSelect.appendChild(option);
         });
         projectForm.onchange = handleChange;
-        projectForm.appendChild(selectLabel);
-        projectForm.appendChild(projectSelect);
+        
         todoCardContainer.appendChild(projectForm);
         
 
@@ -209,16 +272,20 @@ export const domManipulation = () => {
             /* finds that todo in the todos array*/
             
             if (toDosUpdated) {
-                console.log(toDosUpdated)
+                
                 const inArray = toDosUpdated.findIndex((el) => {
                 
                     return el.title === todo.title
                 })  
-                console.log(inArray)
+                
                 toDos[inArray] = todo;
             
                 toDosUpdated = toDos;
-                console.log(toDosUpdated);
+                
+                const toDosUpdatedLS = localStorage.setItem('todos', JSON.stringify(toDosUpdated));
+                console.log(toDosUpdatedLS)
+                
+
                 renderToDo(projects, toDosUpdated);
                 
             }
@@ -229,7 +296,9 @@ export const domManipulation = () => {
             toDos[inArray] = todo;
             
             toDosUpdated = toDos;
-            console.log(toDosUpdated)
+            const toDosUpdatedLS = localStorage.setItem('todos', JSON.stringify(toDosUpdated));
+            console.log(toDosUpdatedLS)
+            
             renderToDo(projects, toDosUpdated);
 
             
