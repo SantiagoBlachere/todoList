@@ -1,12 +1,75 @@
 
 import { forms } from "./forms";
 export const domManipulation = () => {
-    /* global variables */
-    const projectsArray = [];
-    const toDos = [];
-    let toDosUpdated = [];
+    /* classes */
+    class Todo {
+        constructor(title, description='no description', dueDate, priority, project='any') {
+            this.title = title,
+            this.description = description,
+            this.dueDate = dueDate,
+            this.priority = priority,
+            
+            this.project = project
+            this.any = 'any';
+            
+            
+            
     
+        }
+        localStorageSet() {
+            // Retrieve existing todos from local storage
+            const existingTodos = JSON.parse(localStorage.getItem('todos')) || [];
+            // Add the new todo to the existing todos
+            existingTodos.push({ ...this });
+            // Save the updated todos array back to local storage
+            localStorage.setItem('todos', JSON.stringify(existingTodos));
+        };
+        removeFromLs() {
+            
+            
+            const existingTodos = JSON.parse(localStorage.getItem('todos')) || [];
+            
+            const toDoIndex = toDos.indexOf(this);
+            
+                    if (toDoIndex > -1) {
+                        existingTodos.splice(toDoIndex, 1);
+                        localStorage.setItem('todos', JSON.stringify(existingTodos));
+                    };
+            
+            
+            
+        }
+     }
+    
+        class Project {
+            
+            constructor(name) {
+                this.name = name
+                projectsArray.push(this);
+                
+            }
+            
+    
+    } 
+    /* global variables */
+    let toDosFromLs = JSON.parse(localStorage.getItem('todos')) || [];
+    console.log(toDosFromLs)
+    let lsToDosWithMethods = [];
+    if (toDosFromLs.length > 0) {
+        toDosFromLs.forEach((todo) => {
+            
+            let todoFromLs = Object.assign(new Todo(), todo );
+            lsToDosWithMethods.push(todoFromLs);
+        });
+    }
+    
+    
+    const projectsArray = [] 
+    const toDos = lsToDosWithMethods || [];
+    let toDosUpdated = lsToDosWithMethods || [];
    
+   
+    
     /* DOM static sections */
     
 
@@ -81,7 +144,12 @@ export const domManipulation = () => {
                 let description = todoForm.elements["description"].value;
                 let priority = todoForm.elements["priority"].value;
                 let project = todoForm.elements["project"].value;
-                let submittedTodo = new Todo(title, description, date, priority, project)
+                let submittedTodo = new Todo(title, description, date, priority, project);
+                
+                submittedTodo.localStorageSet()
+                
+
+                toDos.push(submittedTodo);
 
                 
                 renderToDo(projectsArray, toDos)
@@ -93,52 +161,16 @@ export const domManipulation = () => {
     toDosContainer.classList.add('toDosSection')
     root.appendChild(toDosContainer)
 
-    
-    /* classes */
-    class Todo {
-        constructor(title, description='no description', dueDate, priority, project='any') {
-            this.title = title,
-            this.description = description,
-            this.dueDate = dueDate,
-            this.priority = priority,
-            
-            this.project = project
-            this.any = 'any'
-            toDos.push( { ...this } )
-        }
-
-        
-    }
-    
-    class Project {
-        
-        constructor(name) {
-            this.name = name
-            projectsArray.push(this);
-            
-        }
-        
-
-    }
-    /* toy objects to see if it works */
-    
-    
-    
     renderProjects(projectsArray, toDos);
     
     renderToDo(projectsArray, toDos);
     
-   
-    
-    
+
     /* render a todo item */
     function renderToDo (projects, toDos) {
-    let localStorageTodos = JSON.parse(localStorage.getItem('todos'));
-    if (localStorageTodos.length > 0) {
-        toDos = localStorageTodos;
-    }
+    
 
-    console.log(localStorageTodos)
+    
     const root = document.querySelector('#root');
    
         
@@ -154,9 +186,9 @@ export const domManipulation = () => {
     
     toDos.forEach((todo) => {
         
-    
+        
         const todoCardContainer = document.createElement('div');
-        todoCardContainer.classList.add('toDoCard')
+        todoCardContainer.classList.add('toDoCard');
         
     
         const title = document.createElement('h2');
@@ -167,13 +199,28 @@ export const domManipulation = () => {
         dueDate.innerText = `Due date: ${todo.dueDate}`;
         todoCardContainer.appendChild(dueDate);
 
+        const removeTodoBtn = document.createElement('button');
+        removeTodoBtn.innerText = 'Remove To-Do';
+        removeTodoBtn.onclick = () => {
+            todoCardContainer.remove();
+            todo.removeFromLs()
+        };
+        todoCardContainer.appendChild(removeTodoBtn);
+
+        
+
         if (todo.project !== 'any') {
             const project = document.createElement('p');
             project.classList.add('project')
             project.innerText = `Assigned project: ${todo.project}`;
             todoCardContainer.appendChild(project);
-            
         }
+
+        
+        
+        
+        
+        
 
 
         (function createDetailBtn () {
@@ -181,6 +228,7 @@ export const domManipulation = () => {
             detailsBtn.classList.add('details')
             detailsBtn.innerText = 'Details';
             detailsBtn.onclick = detailClickHandler;
+            
             todoCardContainer.appendChild(detailsBtn);
             function detailClickHandler() {
                 todoCardContainer.appendChild(description);
@@ -191,7 +239,9 @@ export const domManipulation = () => {
                 detailsBtn.remove();
                 const undetailedBtn = document.createElement('button');
                 undetailedBtn.innerText = 'Go Back';
+                
                 todoCardContainer.appendChild(undetailedBtn);
+
                 undetailedBtn.onclick = () => {
                     let project = document.querySelector('.project');
                     project.remove();
@@ -211,7 +261,7 @@ export const domManipulation = () => {
         
         
         
-        /* tabas haciendo el boton para expandir detalles, appendeando los demas elementos solo cuando se clickee esto, acordate de borrar */
+        
         const description = document.createElement('p');
         if (todo.description !== '') {
             description.innerText = `description: ${todo.description}`;
@@ -282,8 +332,7 @@ export const domManipulation = () => {
             
                 toDosUpdated = toDos;
                 
-                const toDosUpdatedLS = localStorage.setItem('todos', JSON.stringify(toDosUpdated));
-                console.log(toDosUpdatedLS)
+                
                 
 
                 renderToDo(projects, toDosUpdated);
@@ -296,10 +345,7 @@ export const domManipulation = () => {
             toDos[inArray] = todo;
             
             toDosUpdated = toDos;
-            const toDosUpdatedLS = localStorage.setItem('todos', JSON.stringify(toDosUpdated));
-            console.log(toDosUpdatedLS)
             
-            renderToDo(projects, toDosUpdated);
 
             
             
