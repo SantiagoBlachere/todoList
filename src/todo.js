@@ -11,11 +11,7 @@ export const domManipulation = () => {
             
             this.project = project
             this.any = 'any';
-            
-            
-            
-    
-        }
+    }
         localStorageSet() {
             // Retrieve existing todos from local storage
             const existingTodos = JSON.parse(localStorage.getItem('todos')) || [];
@@ -27,14 +23,24 @@ export const domManipulation = () => {
         removeFromLs() {
             
             
-            const existingTodos = JSON.parse(localStorage.getItem('todos')) || [];
+            let existingTodos = JSON.parse(localStorage.getItem('todos'))
+            if (!existingTodos) {
+                existingTodos = [];
+            };
             
-            const toDoIndex = toDos.indexOf(this);
+            let nameOfTodo = this.title;
+            const toDoIndex = existingTodos.findIndex( (todo) => {
+                return todo.title === nameOfTodo
+            });
             
-                    if (toDoIndex > -1) {
-                        existingTodos.splice(toDoIndex, 1);
-                        localStorage.setItem('todos', JSON.stringify(existingTodos));
-                    };
+            if (toDoIndex > -1) {
+                
+                existingTodos.splice(toDoIndex, 1);
+                
+                localStorage.setItem('todos', JSON.stringify(existingTodos));
+            };
+            toDos = [];
+            getToDos();
             
             
             
@@ -47,26 +53,48 @@ export const domManipulation = () => {
                 this.name = name
                 projectsArray.push(this);
                 
+            };
+            setProjectInLs() {
+                console.log('asdeano')
+                const existingProjects = JSON.parse(localStorage.getItem('projects')) ||  [];
+                existingProjects.push(this);
+                localStorage.setItem('projects', JSON.stringify(existingProjects));
+
+                console.log(existingProjects)
             }
             
     
     } 
     /* global variables */
-    let toDosFromLs = JSON.parse(localStorage.getItem('todos')) || [];
-    console.log(toDosFromLs)
-    let lsToDosWithMethods = [];
-    if (toDosFromLs.length > 0) {
-        toDosFromLs.forEach((todo) => {
-            
-            let todoFromLs = Object.assign(new Todo(), todo );
-            lsToDosWithMethods.push(todoFromLs);
-        });
+    function getToDos() {
+        toDosFromLs = JSON.parse(localStorage.getItem('todos')) || [];
+        
+        let lsToDosWithMethods = [];
+        if (toDosFromLs.length > 0) {
+            toDosFromLs.forEach((todo) => {
+                
+                let todoFromLs = Object.assign(new Todo(), todo );
+                lsToDosWithMethods.push(todoFromLs);
+                toDos = lsToDosWithMethods;
+                toDosUpdated = lsToDosWithMethods;
+            });
+        
+        }
+    };
+    function getProjects() {
+        projectsFromLs = JSON.parse(localStorage.getItem('projects')) || [];
+        projectsArray = projectsFromLs;
     }
     
     
-    const projectsArray = [] 
-    const toDos = lsToDosWithMethods || [];
-    let toDosUpdated = lsToDosWithMethods || [];
+    let projectsFromLs;
+    let toDosFromLs;
+    let projectsArray = [] 
+    let toDos =  [];
+    let toDosUpdated = [];
+    getToDos();
+    getProjects();
+    
    
    
     
@@ -108,6 +136,7 @@ export const domManipulation = () => {
                 
                 
                 const newProject = new Project(projectName);
+                newProject.setProjectInLs();
                 
                 renderProjects(projectsArray, toDos); 
                 renderToDo(projectsArray, toDos);
@@ -146,7 +175,7 @@ export const domManipulation = () => {
                 let project = todoForm.elements["project"].value;
                 let submittedTodo = new Todo(title, description, date, priority, project);
                 
-                submittedTodo.localStorageSet()
+                submittedTodo.localStorageSet();
                 
 
                 toDos.push(submittedTodo);
@@ -167,11 +196,12 @@ export const domManipulation = () => {
     
 
     /* render a todo item */
-    function renderToDo (projects, toDos) {
+    function renderToDo (projectsArray, toDos) {
+    getToDos();
     
 
     
-    const root = document.querySelector('#root');
+   
    
         
     const toDosPrevious = document.querySelector('.toDoArticle');
@@ -202,8 +232,12 @@ export const domManipulation = () => {
         const removeTodoBtn = document.createElement('button');
         removeTodoBtn.innerText = 'Remove To-Do';
         removeTodoBtn.onclick = () => {
+            
             todoCardContainer.remove();
-            todo.removeFromLs()
+            todo.removeFromLs();
+            getToDos();
+            
+            
         };
         todoCardContainer.appendChild(removeTodoBtn);
 
@@ -297,7 +331,7 @@ export const domManipulation = () => {
         anyOption.setAttribute('value', 'any');
         anyOption.innerText = `${'Any'}`
         projectSelect.appendChild(anyOption)
-        projects.forEach(project => {
+        projectsArray.forEach(project => {
         
             const option = document.createElement('option');
             option.classList.add(`option`);
@@ -335,7 +369,7 @@ export const domManipulation = () => {
                 
                 
 
-                renderToDo(projects, toDosUpdated);
+                renderToDo(projectsArray, toDosUpdated);
                 
             }
             const inArray = toDos.findIndex((el) => {
@@ -359,7 +393,7 @@ export const domManipulation = () => {
      
 }
     /* project rendering */
-    function renderProjects(projects, toDos) {
+    function renderProjects(projectsArray, toDos) {
         
         /* check if projects already exists, and remove it*/
         const previousContainer = document.querySelector('.projectsContainer')
@@ -383,8 +417,8 @@ export const domManipulation = () => {
         })
         projectsContainer.appendChild(anyBtn)
         /* render each project as a button, if there's more than 0*/
-        if (projects.length > 0) {
-            projects.forEach(project => {
+        if (projectsArray.length > 0) {
+            projectsArray.forEach(project => {
             
             
                 const projectBtn = document.createElement('button');
