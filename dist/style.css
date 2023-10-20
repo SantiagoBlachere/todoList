@@ -1,19 +1,37 @@
+@font-face {
+    font-family: brutal;
+    src: url('../src/font/BrutalType-Light.ttf');
+}
+*{
+    margin: 0;
+    padding: 0;
+}
 #root {
     display: grid;
+    height: 100vh;
     grid-template-columns: 8fr 2fr;
     grid-template-rows: 1fr 9fr;
+    font-family: brutal;
+    background-color: #F4E8D2;
     
 }
-
-
-
-
-
-
-
-
-
-.toDoCard {
-    border: 2px solid black;
+button {
+    font-family: brutal;
+    background-color: #D2BC95;
+    border: none;
+}
+.toDoArticle {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 150px))
 }
 
+.toDoCard {
+    
+}
+.toastify {
+    display: flex;
+    width: 100px;
+    justify-self: flex-end
+    
+    
+}

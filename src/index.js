@@ -1,7 +1,8 @@
 import { domManipulation } from "./todo";
 
-domManipulation();
 
+
+domManipulation();
 
 
 

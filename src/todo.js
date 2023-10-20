@@ -1,5 +1,8 @@
 
 import { forms } from "./forms";
+import swal from 'sweetalert';
+
+
 export const domManipulation = () => {
     /* classes */
     class Todo {
@@ -174,7 +177,18 @@ export const domManipulation = () => {
                 let priority = todoForm.elements["priority"].value;
                 let project = todoForm.elements["project"].value;
                 let submittedTodo = new Todo(title, description, date, priority, project);
-                
+                let alreadyexists = toDos.find((todo) => {
+                    return todo.title === title
+                });
+                if (alreadyexists) {
+                    swal({
+                        title: "Error",
+                        text: `There's already a To-Do named "${title}"`,
+                        icon: "error",
+                        button: "Aww yiss!",
+                      });
+                    return
+                }
                 submittedTodo.localStorageSet();
                 
 
@@ -277,8 +291,8 @@ export const domManipulation = () => {
                 todoCardContainer.appendChild(undetailedBtn);
 
                 undetailedBtn.onclick = () => {
-                    let project = document.querySelector('.project');
-                    project.remove();
+                    
+                    description.remove();
                     priority.remove();
                     selectLabel.remove();
                     projectSelect.remove();
