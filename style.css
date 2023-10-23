@@ -9,7 +9,7 @@
 #root {
     display: grid;
     height: 100vh;
-    grid-template-columns: 8fr 2fr;
+    grid-template-columns: 8fr 3fr;
     grid-template-rows: 1fr 9fr;
     font-family: brutal;
     background-color: #F4E8D2;
@@ -20,13 +20,23 @@ button {
     background-color: #D2BC95;
     border: none;
 }
+.toDosSection {
+    padding-left: 20px;
+}
 .toDoArticle {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 150px))
+    grid-template-columns: repeat(auto-fit, minmax(100px, 150px));
+    gap:15px
 }
 
 .toDoCard {
-    
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+select {
+    background-color: #D2BC95;
+    border: none;
 }
 .toastify {
     display: flex;
@@ -35,3 +45,78 @@ button {
     
     
 }
+.navBar {
+    display: grid;
+    grid-template-rows: 1;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    
+}
+.navBar > button {
+    margin-top: 5px;
+    height: 20px;
+    width: 90%;
+    
+}
+.navBar > button:hover {
+    background-color:#392728;
+    color: white;
+}
+
+.form {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    height: 100px;
+    gap: 5px;
+}
+
+.form > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    
+}
+
+.inputDiv > input {
+    width: 140px;
+    background-color: #D2BC95;
+    border: none;
+    margin-left: 5px;
+}
+input[type="date"] {
+    width: 140px;
+    margin-left: 5px;
+};
+
+option {
+    background-color: #D2BC95;
+    border: none;
+}
+input[type="submit"] {
+    margin-top: 20px;
+    width: 140px;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    border: none;
+    background-color: #D2BC95;
+    height: 30px;
+}
+input[type="submit"]:hover {
+    background-color:#392728;
+    color: white;
+}
+#project-name {
+    width: 100px;
+}
+
+.custom-select {
+    -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-color:#D2BC95;
+  border: none;
+  width: 140px;
+  margin-left: 5px;
+}
+
+input[required]:invalid { background-color: #9D7168; }

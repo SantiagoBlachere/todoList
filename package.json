@@ -18,5 +18,12 @@
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.6.13",
     "toastify-js": "^1.12.0"
+  },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 4,
+    "semi": false,
+    "singleQuote": true
   }
 }
+
