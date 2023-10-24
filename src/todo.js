@@ -54,16 +54,16 @@ export const domManipulation = () => {
             projectsArray.push(this)
         }
         setProjectInLs() {
-            console.log('asdeano')
+            
             const existingProjects =
-                JSON.parse(localStorage.getItem('projects')) || []
+            JSON.parse(localStorage.getItem('projects')) || []
             existingProjects.push(this)
             localStorage.setItem('projects', JSON.stringify(existingProjects))
 
-            console.log(existingProjects)
+            
         }
     }
-    /* global variables */
+    
     function getToDos() {
         toDosFromLs = JSON.parse(localStorage.getItem('todos')) || []
 
@@ -81,7 +81,7 @@ export const domManipulation = () => {
         projectsFromLs = JSON.parse(localStorage.getItem('projects')) || []
         projectsArray = projectsFromLs
     }
-
+    /* global variables */  
     let projectsFromLs
     let toDosFromLs
     let projectsArray = []
@@ -120,9 +120,22 @@ export const domManipulation = () => {
             let projectForm = forms.projectForm()
 
             projectForm.onsubmit = (e) => {
+                
                 e.preventDefault()
                 let projectName = projectForm.elements['project'].value
-
+                let alreadyExists = projectsArray.find((project) => {
+                    return project.name === projectName
+                })
+                
+                if (alreadyExists || projectName.toLowerCase() == 'any') {
+                    swal({
+                        title: 'Error',
+                        text: `There's already a Project named "${projectName}"`,
+                        icon: 'error',
+                        button: 'Aww yiss!',
+                    })
+                    return
+                }
                 const newProject = new Project(projectName)
                 newProject.setProjectInLs()
 
@@ -157,6 +170,20 @@ export const domManipulation = () => {
             todoForm.onsubmit = (e) => {
                 e.preventDefault()
                 let date = todoForm.elements['date'].value
+                const parts = date.split('-');
+                console.log(parts)
+                
+                const year = parts[0].slice(-2); // Get the last two characters of the year
+                console.log(year)
+                const month = parts[1];
+                console.log(month)
+                const day = parts[2];
+                console.log(day)
+
+                const formatted = `${month}/${day}/${year}`;
+                    
+                
+                date = formatted
                 let title = todoForm.elements['title'].value
                 let description = todoForm.elements['description'].value
                 let priority = todoForm.elements['priority'].value
@@ -214,7 +241,8 @@ export const domManipulation = () => {
             todoCardContainer.classList.add('toDoCard')
             const todoCardId = `todoCard_${todo.title.replace(/\s+/g, '_')}`
             todoCardContainer.setAttribute('id',`${todoCardId}`)
-            console.log(todoCardContainer.getAttribute("id"))
+
+            
             const title = document.createElement('h2')
             title.innerText = `${todo.title}`
             todoCardContainer.appendChild(title)
@@ -223,14 +251,7 @@ export const domManipulation = () => {
             dueDate.innerText = `Due date: ${todo.dueDate}`
             todoCardContainer.appendChild(dueDate)
 
-            const removeTodoBtn = document.createElement('button')
-            removeTodoBtn.innerText = 'Remove To-Do'
-            removeTodoBtn.onclick = () => {
-                todoCardContainer.remove()
-                todo.removeFromLs()
-                getToDos()
-            }
-            todoCardContainer.appendChild(removeTodoBtn)
+            
 
             if (todo.project !== 'any') {
                 const project = document.createElement('p')
@@ -238,16 +259,15 @@ export const domManipulation = () => {
                 project.innerText = `Assigned project: ${todo.project}`
                 todoCardContainer.appendChild(project)
             }
-
-            (function createDetailBtn() {
+            if (todoCardContainer) {
+                
+            }
+            (function createDetailBtn(thisToDoContainer) {
                 const detailsBtn = document.createElement('button')
                 detailsBtn.classList.add(`${todo.title}Details`)
                 detailsBtn.innerText = 'Details'
                 detailsBtn.onclick = detailClickHandler
-                const todoCardId = `todoCard_${todo.title.replace(/\s+/g, '_')}`
-                console.log(todoCardId)
-                const thisToDoContainer = document.getElementById(`${todoCardId}`)
-                console.log(thisToDoContainer)
+                thisToDoContainer.appendChild(detailsBtn)
                 
                 function detailClickHandler() { 
                     
@@ -268,10 +288,10 @@ export const domManipulation = () => {
                         selectLabel.remove()
                         projectSelect.remove()
                         undetailedBtn.remove()
-                        createDetailBtn()
+                        createDetailBtn(thisToDoContainer)
                     }
                 }
-            })()
+            })(todoCardContainer)
 
             const description = document.createElement('p')
             if (todo.description !== '') {
@@ -335,6 +355,17 @@ export const domManipulation = () => {
 
                 toDosUpdated = toDos
             }
+            
+            const removeTodoBtn = document.createElement('button')
+            removeTodoBtn.classList.add('removeBtn')
+            removeTodoBtn.innerText = '❌'
+            removeTodoBtn.onclick = () => {
+                todoCardContainer.remove()
+                todo.removeFromLs()
+                getToDos()
+                console.log(toDos)
+            }
+            todoCardContainer.appendChild(removeTodoBtn)
             toDoArticle.appendChild(todoCardContainer)
 
             toDosContainer.appendChild(toDoArticle)
@@ -342,6 +373,7 @@ export const domManipulation = () => {
     }
     /* project rendering */
     function renderProjects(projectsArray, toDos) {
+        
         /* check if projects already exists, and remove it*/
         const previousContainer = document.querySelector('.projectsContainer')
         if (previousContainer) {
@@ -356,6 +388,8 @@ export const domManipulation = () => {
         anyBtn.classList.add('projectBtn')
         anyBtn.setAttribute('any', 'any')
         anyBtn.addEventListener('click', () => {
+            getToDos()
+            console.log(toDos)
             let projectToDos = toDos.filter((el) => {
                 return el.any === 'any'
             })

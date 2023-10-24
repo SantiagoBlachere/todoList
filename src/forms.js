@@ -22,6 +22,7 @@ export const forms = (function () {
         let projectNameLabel = document.createElement('label')
         projectNameLabel.setAttribute('for', 'project-name')
         projectNameLabel.innerText = 'Project name: '
+        projectName.required = true
 
         let submitProjectBtn = document.createElement('input')
         submitProjectBtn.setAttribute('type', 'submit')

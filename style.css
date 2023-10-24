@@ -25,14 +25,16 @@ button {
 }
 .toDoArticle {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 150px));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 200px));
     gap:15px
 }
 
 .toDoCard {
+    position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    height: 200px;
 }
 select {
     background-color: #D2BC95;
@@ -106,7 +108,10 @@ input[type="submit"]:hover {
     color: white;
 }
 #project-name {
-    width: 100px;
+    width: 150px;
+    background-color: #D2BC95;
+    border: none;
+    height: 19px;
 }
 
 .custom-select {
@@ -120,3 +125,26 @@ input[type="submit"]:hover {
 }
 
 input[required]:invalid { background-color: #9D7168; }
+
+
+.removeBtn {
+    font-size: 20px;
+    color: black;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #F4E8D2;
+        
+    
+}
+
+.projectsContainer {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20px, 100px));
+    gap: 10px;
+}
+button:hover {
+    background-color: #392728;
+    color: white;
+}
