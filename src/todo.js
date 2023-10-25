@@ -29,14 +29,17 @@ export const domManipulation = () => {
         }
         removeFromLs() {
             let existingTodos = JSON.parse(localStorage.getItem('todos'))
+            
             if (!existingTodos) {
                 existingTodos = []
             }
-
+            
             let nameOfTodo = this.title
+            
             const toDoIndex = existingTodos.findIndex((todo) => {
                 return todo.title === nameOfTodo
             })
+            
 
             if (toDoIndex > -1) {
                 existingTodos.splice(toDoIndex, 1)
@@ -45,6 +48,7 @@ export const domManipulation = () => {
             }
             toDos = []
             getToDos()
+            
         }
     }
 
@@ -62,12 +66,36 @@ export const domManipulation = () => {
 
             
         }
+        removeProjectFromLs() {
+            let existingProjects = JSON.parse(localStorage.getItem('projects'))
+            
+            if (!existingProjects) {
+                existingTodos = []
+            }
+            
+            let nameOfProject = this.name
+            
+            const projectIndex = existingProjects.findIndex((project) => {
+                return project.name === nameOfProject
+            })
+            
+
+            if (projectIndex > -1) {
+                existingProjects.splice(projectIndex, 1)
+
+                localStorage.setItem('projects', JSON.stringify(existingProjects))
+            }
+            projectsArray = []
+            getProjects()
+            
+        }
     }
     
     function getToDos() {
-        toDosFromLs = JSON.parse(localStorage.getItem('todos')) || []
-
+        let toDosFromLs = JSON.parse(localStorage.getItem('todos')) || []
+        console.log(toDosFromLs)
         let lsToDosWithMethods = []
+        
         if (toDosFromLs.length > 0) {
             toDosFromLs.forEach((todo) => {
                 let todoFromLs = Object.assign(new Todo(), todo)
@@ -75,11 +103,28 @@ export const domManipulation = () => {
                 toDos = lsToDosWithMethods
                 toDosUpdated = lsToDosWithMethods
             })
+        } else {
+            toDos = []
+            toDosUpdated = []
         }
+        console.log(toDos)
+        console.log(toDosUpdated)
+        
     }
     function getProjects() {
         projectsFromLs = JSON.parse(localStorage.getItem('projects')) || []
         projectsArray = projectsFromLs
+        let projectsWithMethods = []
+        if (projectsArray.length > 0) {
+            projectsArray.forEach((project) => {
+                let projectFromLs = Object.assign(new Project(), project)
+                projectsWithMethods.push(projectFromLs)
+                projectsArray = projectsWithMethods
+
+            })
+        } else {
+            projectsArray = []
+        }
     }
     /* global variables */  
     let projectsFromLs
@@ -361,7 +406,9 @@ export const domManipulation = () => {
             removeTodoBtn.innerText = '❌'
             removeTodoBtn.onclick = () => {
                 todoCardContainer.remove()
-                todo.removeFromLs()
+                setTimeout(() => {
+                    todo.removeFromLs()
+                }, 10)
                 getToDos()
                 console.log(toDos)
             }
@@ -400,6 +447,8 @@ export const domManipulation = () => {
         /* render each project as a button, if there's more than 0*/
         if (projectsArray.length > 0) {
             projectsArray.forEach((project) => {
+                const buttonContainer = document.createElement('div')
+                buttonContainer.classList.add('buttonProjectContainer')
                 const projectBtn = document.createElement('button')
                 projectBtn.innerText = project.name
                 projectBtn.classList.add('projectBtn')
@@ -407,13 +456,23 @@ export const domManipulation = () => {
 
                 projectBtn.setAttribute('project-name', project.name)
 
-                projectsContainer.appendChild(projectBtn)
+                const removeProjectBtn = document.createElement('button');
+                removeProjectBtn.innerText = 'X'
+                removeProjectBtn.classList.add('removeProjectBtn')
+                buttonContainer.appendChild(projectBtn)
+                buttonContainer.appendChild(removeProjectBtn)
+                removeProjectBtn.onclick = () => {
+                    project.removeProjectFromLs();
+                    buttonContainer.remove();
+                }
+                projectsContainer.appendChild(buttonContainer)
             })
             /* event listener, renders every element that corresponds with the project clicked*/
             function handleClick(e) {
                 e.preventDefault
                 let projectClicked = e.target.getAttribute('project-name')
-
+                getToDos();
+                console.log(toDos)
                 let projectToDos = toDos.filter((el) => {
                     return el.project === projectClicked
                 })

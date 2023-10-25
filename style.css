@@ -139,10 +139,28 @@ input[required]:invalid { background-color: #9D7168; }
 }
 
 .projectsContainer {
-    margin-top: 5px;
+    
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(20px, 100px));
     gap: 10px;
+}
+.projectsContainer>button {
+    margin-top: 5px;
+    height: 20px;
+    
+}
+.buttonProjectContainer>button {
+    margin-top: 5px;
+    height: 20px;
+}
+.buttonProjectContainer>button {
+    background-color: #D2BC95 !important;
+}
+.removeProjectBtn {
+    width: 20px;
+}
+.removeProjectBtn:hover {
+    background-color: #D2BC95 !important;
 }
 button:hover {
     background-color: #392728;
