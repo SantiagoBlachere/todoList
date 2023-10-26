@@ -1,8 +1,3 @@
 falta ->
 
-arreglar el ls que se rompió por alguna razón (no se borran correctamente los todos del ls, solo cuando se aprieta f5);
-que los nombres ded los todos puedan tener números pero no interfiera con el código (ahora mismo no puedo acceder a los detalles dado a quye no pueden haber ids con números )
-
-y listo :3
-
-NO ENTIENDO EL LS, PEDIR AYUDA EN EL DISC DE ODIN
+que los projects no se dupliquen al ser subidos via el form
