@@ -53,7 +53,7 @@ export const domManipulation = () => {
     class Project {
         constructor(name) {
             this.name = name
-            projectsArray.push(this)
+            
         }
         setProjectInLs() {
             const existingProjects =
@@ -199,6 +199,7 @@ export const domManipulation = () => {
             const projectSelect = document.createElement('select')
             projectSelect.classList.add('custom-select')
             projectSelect.setAttribute('name', 'project')
+            getProjects()
             projectsArray.forEach((project) => {
                 let projectOption = document.createElement('option')
                 projectOption.innerText = `${project.name}`
@@ -215,7 +216,7 @@ export const domManipulation = () => {
             root.appendChild(todoForm)
 
             todoForm.onsubmit = (e) => {
-                
+                e.preventDefault()
                 let date = todoForm.elements['date'].value
                 const parts = date.split('-')
 
@@ -232,6 +233,19 @@ export const domManipulation = () => {
                 let description = todoForm.elements['description'].value
                 let priority = todoForm.elements['priority'].value
                 let project = todoForm.elements['project'].value
+                getProjects()
+                
+                let projectExists = projectsArray.some( (el) => el.name === project)
+                
+                if (!projectExists && project !== '') {
+                    swal({
+                        title: 'Error',
+                        text: `There's no project with that name! Reload task form!`,
+                        icon: 'error',
+                        button: 'OK',
+                    })
+                    return
+                }
                 let submittedTodo = new Todo(
                     title,
                     description,
@@ -247,14 +261,14 @@ export const domManipulation = () => {
                         title: 'Error',
                         text: `There's already a To-Do named "${title}"`,
                         icon: 'error',
-                        button: 'Aww yiss!',
+                        button: 'OK',
                     })
                     return
                 }
                 submittedTodo.localStorageSet()
 
                 toDos.push(submittedTodo)
-                
+                console.log(toDos)
                 renderToDo(projectsArray, toDos)
             }
         }
@@ -284,7 +298,19 @@ export const domManipulation = () => {
         toDos.forEach((todo) => {
             const todoCardContainer = document.createElement('div')
             todoCardContainer.classList.add('toDoCard')
-            const todoCardId = `todoCard_${todo.title.replace(/\s+/g, '_')}`
+            function generateRandomId(length) {
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const charactersLength = characters.length;
+                let randomString = '';
+              
+                for (let i = 0; i < length; i++) {
+                  randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
+                }
+              
+                return randomString;
+            }
+            const todoCardId = generateRandomId(5)
+            
             todoCardContainer.setAttribute('id', `${todoCardId}`)
 
             const title = document.createElement('h2')
@@ -301,13 +327,13 @@ export const domManipulation = () => {
                 project.innerText = `Assigned project: ${todo.project}`
                 todoCardContainer.appendChild(project)
             }
-            if (todoCardContainer) {
-            }
-            ;(function createDetailBtn(thisToDoContainer) {
+            
+            (function createDetailBtn(thisToDoContainer, todoCardId) {
                 const detailsBtn = document.createElement('button')
-                let key = todo.title.replace(/[^a-zA-Z]/g, '')
                 
-                detailsBtn.classList.add(`${key}details`)
+                let key = todoCardId
+                
+                detailsBtn.classList.add(key)
                 detailsBtn.innerText = 'Details'
                 detailsBtn.onclick = () => detailClickHandler(key)
                 thisToDoContainer.appendChild(detailsBtn)
@@ -318,7 +344,7 @@ export const domManipulation = () => {
                     thisToDoContainer.appendChild(priority)
                     projectForm.appendChild(selectLabel)
                     projectForm.appendChild(projectSelect)
-                    const detailsBtn = document.querySelector(`.${key}details`)
+                    const detailsBtn = document.querySelector(`.${key}`)
                     detailsBtn.remove()
                     const undetailedBtn = document.createElement('button')
                     undetailedBtn.innerText = 'Go Back'
@@ -334,7 +360,7 @@ export const domManipulation = () => {
                         createDetailBtn(thisToDoContainer)
                     }
                 }
-            })(todoCardContainer)
+            })(todoCardContainer, todoCardId)
 
             const description = document.createElement('p')
             if (todo.description !== '') {
@@ -404,18 +430,14 @@ export const domManipulation = () => {
             removeTodoBtn.classList.add('removeBtn')
             removeTodoBtn.innerText = '❌'
             removeTodoBtn.onclick = () => {
-                
+                console.log(todoCardContainer)
                 todoCardContainer.remove()
+                console.log(todoCardContainer)
 
                 todo.removeFromLs()
-                toDos = toDos.filter( (item) => item.title !== todo.title)
-                toDos.forEach((todo) => {
-                    todo.localStorageSet()
-                })
                 
-                if (toDos.length > 0) {
-                    renderToDo(projectsArray, toDos)
-                }
+                
+                
             }
 
             todoCardContainer.appendChild(removeTodoBtn)

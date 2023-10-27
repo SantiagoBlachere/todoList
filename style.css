@@ -141,23 +141,30 @@ input[required]:invalid { background-color: #9D7168; }
 .projectsContainer {
     
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20px, 100px));
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 50px));
+    
+}
+.buttonProjectContainer {
+    margin-top: 5px;
+    margin-right: 5px;
+    height: 20px;
+    background-color:#D2BC95;
+    display: flex;
+    justify-content: space-between;
 }
 .projectsContainer>button {
     margin-top: 5px;
+    margin-right: 5px;
     height: 20px;
     
 }
-.buttonProjectContainer>button {
-    margin-top: 5px;
-    height: 20px;
-}
+
 .buttonProjectContainer>button {
     background-color: #D2BC95 !important;
 }
 .removeProjectBtn {
     width: 20px;
+    padding-right: 5px;
 }
 .removeProjectBtn:hover {
     background-color: #D2BC95 !important;

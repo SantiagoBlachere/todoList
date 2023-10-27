@@ -1,7 +1,7 @@
 export const forms = (function () {
     function checkIfItExists() {
         let previousForm = document.querySelectorAll('.form')
-        console.log(previousForm)
+        
         if (previousForm.length > 0) {
             previousForm.forEach((form) => {
                 form.remove()
