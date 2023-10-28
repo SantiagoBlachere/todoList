@@ -299,7 +299,7 @@ export const domManipulation = () => {
             const todoCardContainer = document.createElement('div')
             todoCardContainer.classList.add('toDoCard')
             function generateRandomId(length) {
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
                 const charactersLength = characters.length;
                 let randomString = '';
               
@@ -335,7 +335,7 @@ export const domManipulation = () => {
                 
                 detailsBtn.classList.add(key)
                 detailsBtn.innerText = 'Details'
-                detailsBtn.onclick = () => detailClickHandler(key)
+                detailsBtn.onclick = (key) => detailClickHandler(key)
                 thisToDoContainer.appendChild(detailsBtn)
 
                 function detailClickHandler(key) {
@@ -500,9 +500,11 @@ export const domManipulation = () => {
                 removeProjectBtn.onclick = (e) => {
                     
                     let projectClicked = e.target.getAttribute('project-name')
+                    console.log(projectClicked)
                     
                     const toDos = getToDos()
                     let filteredTodos = toDos.filter((todo) => {
+                        
                         return todo.project === projectClicked
                     })
                     filteredTodos.forEach( (todo) => {
@@ -522,8 +524,10 @@ export const domManipulation = () => {
                 let projectClicked = e.target.getAttribute('project-name')
                 
                 
+                toDos = getToDos()
                 
                 let projectToDos = toDos.filter((el) => {
+                    console.log(el.project)
                     return el.project === projectClicked
                 })
                 
