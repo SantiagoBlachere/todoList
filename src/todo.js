@@ -6,60 +6,74 @@ export const domManipulation = () => {
     class Todo {
         constructor(
             title,
-            description = 'no description',
             dueDate,
             priority,
+            any,
+            description = 'no description',
             project = 'any'
         ) {
             ;(this.title = title),
-                (this.description = description),
                 (this.dueDate = dueDate),
                 (this.priority = priority),
-                (this.project = project)
-            this.any = 'any'
-        }
-        localStorageSet() {
-            // Retrieve existing todos from local storage
-            const existingTodos = JSON.parse(localStorage.getItem('todos')) || [];
-            // Add the new todo to the existing todos
-            existingTodos.push({ ...this });
-            // Save the updated todos array back to local storage
-            localStorage.setItem('todos', JSON.stringify(existingTodos)) || [];
-            
-        }
-        removeFromLs() {
-            let existingTodos = JSON.parse(localStorage.getItem('todos'))
+                (this.any = 'any'),
+                (this.description = description),
+                (this.project = project),
+                function localStorageSet() {
+                    // Retrieve existing todos from local storage
+                    let existingTodos =
+                        JSON.parse(localStorage.getItem('todos')) || []
+                    // Add the new todo to the existing todos
+                    existingTodos.push({ ...this })
+                    // Save the updated todos array back to local storage
+                    existingTodos =
+                        localStorage.setItem(
+                            'todos',
+                            JSON.stringify(existingTodos)
+                        ) || []
+                    return existingTodos
+                },
+                function removeFromLs() {
+                    let existingTodos = JSON.parse(
+                        localStorage.getItem('todos')
+                    )
 
-            if (!existingTodos) {
-                existingTodos = []
-            }
+                    if (!existingTodos) {
+                        existingTodos = []
+                    }
 
-            let nameOfTodo = this.title
+                    let nameOfTodo = this.title
 
-            const toDoIndex = existingTodos.findIndex((todo) => {
-                return todo.title === nameOfTodo
-            })
+                    const toDoIndex = existingTodos.findIndex((todo) => {
+                        return todo.title === nameOfTodo
+                    })
 
-            if (toDoIndex > -1) {
-                existingTodos.splice(toDoIndex, 1)
+                    if (toDoIndex > -1) {
+                        existingTodos.splice(toDoIndex, 1)
 
-                localStorage.setItem('todos', JSON.stringify(existingTodos))
-            }
+                        localStorage.setItem(
+                            'todos',
+                            JSON.stringify(existingTodos)
+                        )
+                    }
 
-            
+                    return existingTodos
+                }
         }
     }
 
     class Project {
         constructor(name) {
             this.name = name
-            
         }
         setProjectInLs() {
-            const existingProjects =
+            let existingProjects =
                 JSON.parse(localStorage.getItem('projects')) || []
             existingProjects.push(this)
-            localStorage.setItem('projects', JSON.stringify(existingProjects)) || []
+            existingProjects =
+                localStorage.setItem(
+                    'projects',
+                    JSON.stringify(existingProjects)
+                ) || []
         }
         removeProjectFromLs() {
             let existingProjects = JSON.parse(localStorage.getItem('projects'))
@@ -82,8 +96,6 @@ export const domManipulation = () => {
                     JSON.stringify(existingProjects)
                 )
             }
-            
-            
         }
     }
 
@@ -98,13 +110,10 @@ export const domManipulation = () => {
                 lsToDosWithMethods.push(todoFromLs)
                 toDos = lsToDosWithMethods
             })
-            
-            
         } else {
             toDos = []
-            
         }
-        
+
         return toDos
     }
     function getProjects() {
@@ -115,14 +124,13 @@ export const domManipulation = () => {
             projectsArray.forEach((project) => {
                 let projectFromLs = Object.assign(new Project(), project)
                 projectsWithMethods.push(projectFromLs)
-                
+
                 projectsArray = projectsWithMethods
-                
             })
         } else {
             projectsArray = []
         }
-        console.log('projects: ',projectsArray)
+        console.log('projects: ', projectsArray)
         return projectsArray
     }
     /* global variables */
@@ -130,12 +138,12 @@ export const domManipulation = () => {
     let toDosFromLs
     let projectsArray = []
     let toDos = []
-    
+
     getToDos()
     getProjects()
 
     /* DOM static sections */
-
+    const root = document.getElemenyById('root')
     const projectsSection = document.createElement('section')
     projectsSection.classList.add('projectsSection')
     root.appendChild(projectsSection)
@@ -157,7 +165,6 @@ export const domManipulation = () => {
     root.appendChild(navBar)
 
     function handleClick(e) {
-        
         let clicked = e.target.getAttribute('name')
 
         if (clicked === 'newProject') {
@@ -167,11 +174,11 @@ export const domManipulation = () => {
                 e.preventDefault()
                 let projectsArray = getProjects()
                 console.log(projectsArray)
-                let projectName = projectForm.elements['project'].value
+                let projectName = projectForm.elements[project].value
                 let alreadyExists = projectsArray.find((project) => {
                     return project.name === projectName
                 })
-                
+
                 if (alreadyExists || projectName.toLowerCase() == 'any') {
                     swal({
                         title: 'Error',
@@ -183,11 +190,10 @@ export const domManipulation = () => {
                 }
                 let newProject = new Project(projectName)
                 newProject.setProjectInLs()
-                
+
                 projectsArray.push(newProject)
                 console.log(projectsArray)
                 renderProjects(projectsArray, toDos)
-                
             }
             root.appendChild(projectForm)
         } else {
@@ -217,7 +223,7 @@ export const domManipulation = () => {
 
             todoForm.onsubmit = (e) => {
                 e.preventDefault()
-                let date = todoForm.elements['date'].value
+                var date = todoForm.elements[date].value
                 const parts = date.split('-')
 
                 const year = parts[0].slice(-2) // Get the last two characters of the year
@@ -229,14 +235,16 @@ export const domManipulation = () => {
                 const formatted = `${month}/${day}/${year}`
 
                 date = formatted
-                let title = todoForm.elements['title'].value
-                let description = todoForm.elements['description'].value
-                let priority = todoForm.elements['priority'].value
-                let project = todoForm.elements['project'].value
+                var title = todoForm.elements[title].value
+                var description = todoForm.elements[description].value
+                var priority = todoForm.elements[priority].value
+                var project = todoForm.elements[project].value
                 getProjects()
-                
-                let projectExists = projectsArray.some( (el) => el.name === project)
-                
+
+                let projectExists = projectsArray.some(
+                    (el) => el.name === project
+                )
+
                 if (!projectExists && project !== '') {
                     swal({
                         title: 'Error',
@@ -280,13 +288,11 @@ export const domManipulation = () => {
     getToDos()
     getProjects()
     renderProjects(projectsArray, toDos)
-    
+
     renderToDo(projectsArray, toDos)
 
     /* render a todo item */
     function renderToDo(projectsArray, toDos) {
-        
-
         const toDosPrevious = document.querySelector('.toDoArticle')
         if (toDosPrevious) {
             toDosPrevious.remove()
@@ -299,18 +305,21 @@ export const domManipulation = () => {
             const todoCardContainer = document.createElement('div')
             todoCardContainer.classList.add('toDoCard')
             function generateRandomId(length) {
-                const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-                const charactersLength = characters.length;
-                let randomString = '';
-              
+                const characters =
+                    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+                const charactersLength = characters.length
+                let randomString = ''
+
                 for (let i = 0; i < length; i++) {
-                  randomString += characters.charAt(Math.floor(Math.random() * charactersLength));
+                    randomString += characters.charAt(
+                        Math.floor(Math.random() * charactersLength)
+                    )
                 }
-              
-                return randomString;
+
+                return randomString
             }
             const todoCardId = generateRandomId(5)
-            
+
             todoCardContainer.setAttribute('id', `${todoCardId}`)
 
             const title = document.createElement('h2')
@@ -327,19 +336,18 @@ export const domManipulation = () => {
                 project.innerText = `Assigned project: ${todo.project}`
                 todoCardContainer.appendChild(project)
             }
-            
-            (function createDetailBtn(thisToDoContainer, todoCardId) {
+
+            ;(function createDetailBtn(thisToDoContainer, todoCardId) {
                 const detailsBtn = document.createElement('button')
-                
+
                 let key = todoCardId
-                
+
                 detailsBtn.classList.add(key)
                 detailsBtn.innerText = 'Details'
                 detailsBtn.onclick = (key) => detailClickHandler(key)
                 thisToDoContainer.appendChild(detailsBtn)
 
                 function detailClickHandler(key) {
-                    
                     thisToDoContainer.appendChild(description)
                     thisToDoContainer.appendChild(priority)
                     projectForm.appendChild(selectLabel)
@@ -413,17 +421,14 @@ export const domManipulation = () => {
 
                     toDos[inArray] = todo
 
-                    
-                   
                     renderToDo(projectsArray, toDos)
                 }
                 const inArray = toDos.findIndex((el) => {
                     return el.title === todo.title
                 })
                 toDos[inArray] = todo
-                
+
                 renderToDo(projectsArray, toDos)
-                
             }
 
             const removeTodoBtn = document.createElement('button')
@@ -435,9 +440,6 @@ export const domManipulation = () => {
                 console.log(todoCardContainer)
 
                 todo.removeFromLs()
-                
-                
-                
             }
 
             todoCardContainer.appendChild(removeTodoBtn)
@@ -450,7 +452,7 @@ export const domManipulation = () => {
     function renderProjects(projectsArray, toDos) {
         getToDos()
         getProjects()
-        
+
         /* check if projects already exists, and remove it*/
         const previousContainer = document.querySelector('.projectsContainer')
         if (previousContainer) {
@@ -465,19 +467,15 @@ export const domManipulation = () => {
         anyBtn.classList.add('projectBtn')
         anyBtn.setAttribute('any', 'any')
         anyBtn.addEventListener('click', () => {
-            
-            const toDos = getToDos();
-            
-        
-            
+            const toDos = getToDos()
+
             let projectToDos = toDos.filter((el) => {
-                return el.any === 'any';
-            });
-            
-        
+                return el.any === 'any'
+            })
+
             // Render the filtered to-dos
-            renderToDo(projectsArray, projectToDos);
-        });
+            renderToDo(projectsArray, projectToDos)
+        })
         projectsContainer.appendChild(anyBtn)
         /* render each project as a button, if there's more than 0*/
         if (projectsArray.length > 0) {
@@ -498,39 +496,33 @@ export const domManipulation = () => {
                 buttonContainer.appendChild(projectBtn)
                 buttonContainer.appendChild(removeProjectBtn)
                 removeProjectBtn.onclick = (e) => {
-                    
                     let projectClicked = e.target.getAttribute('project-name')
                     console.log(projectClicked)
-                    
+
                     const toDos = getToDos()
                     let filteredTodos = toDos.filter((todo) => {
-                        
                         return todo.project === projectClicked
                     })
-                    filteredTodos.forEach( (todo) => {
+                    filteredTodos.forEach((todo) => {
                         todo.project = 'any'
                         todo.localStorageSet()
-                        
                     })
                     project.removeProjectFromLs()
                     buttonContainer.remove()
-                    
                 }
                 projectsContainer.appendChild(buttonContainer)
             })
             /* event listener, renders every element that corresponds with the project clicked*/
             function handleClick(e) {
-                
                 let projectClicked = e.target.getAttribute('project-name')
-                
-                
+
                 toDos = getToDos()
-                
+
                 let projectToDos = toDos.filter((el) => {
                     console.log(el.project)
                     return el.project === projectClicked
                 })
-                
+
                 renderToDo(projectsArray, projectToDos)
             }
         }

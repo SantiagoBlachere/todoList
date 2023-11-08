@@ -1,4 +1,4 @@
-export const forms = (function () {
+export default const forms = (function () {
     function checkIfItExists() {
         let previousForm = document.querySelectorAll('.form')
         
